@@ -51,9 +51,9 @@ class Joystick:
         self.num_axes = None        # Num Axes
         self.num_buttons = None     # Num Buttons
         self.num_hats = None        # Num Hats
-        self.axes = None            # List of Axes
-        self.buttons = None         # List of Buttons
-        self.hats = None            # List of Hats
+        self.axes = None            # List of Axis values
+        self.buttons = None         # List of Button values
+        self.hats = None            # List of Hat values
 
         # Program complete tag
         self.done = False
