@@ -1,6 +1,9 @@
 from read_joystick import Joystick
+from comms import UART
+import math
 
 PS5_Controller = Joystick()
+conn = UART()
 
 while not PS5_Controller.done:
     PS5_Controller.event_handler()
@@ -16,6 +19,14 @@ while not PS5_Controller.done:
     PS5_Controller.display_hats()
 
     PS5_Controller.update_display()
-    PS5_Controller.delay_to_fps(30)
+    
+    axes_values = PS5_Controller.labeled_axes
+    axis_data = axes_values["lknob_x"]
+    print(axis_data)
+
+    conn.write_serial(f"Left Knob X Value is {math.floor(axis_data * 100)}") # Encoding cannot encode periods, so must be integers
+    conn.read_serial()
+
+    PS5_Controller.delay_to_fps(60)
 
 PS5_Controller.quit_pygame()
