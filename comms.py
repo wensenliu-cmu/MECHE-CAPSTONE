@@ -3,7 +3,7 @@ import serial
 class UART:
 
     def __init__(self):
-        self.ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
+        self.ser = serial.Serial('/dev/ttyUSB0', 57600, timeout=1)
         self.ser.reset_input_buffer()
 
     def read_serial(self):

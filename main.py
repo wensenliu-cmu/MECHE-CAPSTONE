@@ -24,9 +24,9 @@ while not PS5_Controller.done:
     axis_data = axes_values["lknob_x"]
     print(axis_data)
 
-    conn.write_serial(f"Left Knob X Value is {math.floor(axis_data * 100)}") # Encoding cannot encode periods, so must be integers
+    conn.write_serial(f"lknob_x is {math.floor(axis_data * 100)}") # Encoding cannot encode periods, so must be integers
     conn.read_serial()
 
-    PS5_Controller.delay_to_fps(60)
+    PS5_Controller.delay_to_fps(30)
 
 PS5_Controller.quit_pygame()
