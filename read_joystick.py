@@ -1,44 +1,19 @@
+from display import TextPrint
 import pygame
-
-# This is a simple class that will help us print to the screen.
-# It has nothing to do with the joysticks, just outputting the
-# information.
-class TextPrint:
-    def __init__(self):
-        self.reset()
-        self.font = pygame.font.Font(None, 25)
-
-    def tprint(self, screen, text):
-        text_bitmap = self.font.render(text, True, (0, 0, 0))
-        screen.blit(text_bitmap, (self.x, self.y))
-        self.y += self.line_height
-
-    def reset(self):
-        self.x = 10
-        self.y = 10
-        self.line_height = 15
-
-    def indent(self):
-        self.x += 10
-
-    def unindent(self):
-        self.x -= 10
+import math
 
 class Joystick:
     
-    def __init__(self):
-        
-        pygame.init()
+    def __init__(self, screen, text_print):
 
         # Set the width and height of the screen (width, height), and name the window.
-        self.screen = pygame.display.set_mode((500, 700))
-        pygame.display.set_caption("Joystick example")
+        self.screen = screen
 
         # Used to manage how fast the screen updates.
         self.clock = pygame.time.Clock()
 
         # Get ready to print.
-        self.text_print = TextPrint()
+        self.text_print = text_print
 
         # Joystick data
         self.joysticks = {}
@@ -91,13 +66,6 @@ class Joystick:
             if event.type == pygame.JOYDEVICEREMOVED:
                 del self.joysticks[event.instance_id]
                 print(f"Joystick {event.instance_id} disconnected")
-    
-    def clear_display(self):
-        # Drawing step
-        # First, clear the screen to white. Don't put other drawing commands
-        # above this, or they will be erased with this command.
-        self.screen.fill((255, 255, 255))
-        self.text_print.reset()
 
     def count_joysticks(self):
         # Get count of joysticks.
@@ -127,7 +95,7 @@ class Joystick:
             # the other. Triggers count as axes.
             self.num_axes = joystick.get_numaxes()
             self.text_print.tprint(self.screen, f"Number of axes: {self.num_axes}")
-            self.axes = [joystick.get_axis(i) for i in range(self.num_axes)]
+            self.axes = [math.floor(joystick.get_axis(i)*10) for i in range(self.num_axes)]
 
             # Get buttons
             self.num_buttons = joystick.get_numbuttons()
@@ -194,9 +162,6 @@ class Joystick:
             self.text_print.tprint(self.screen, f"Hat {i} value: {str(hat)}")
             i += 1
         self.text_print.unindent()
-
-    def update_display(self):
-        pygame.display.flip()
 
     def delay_to_fps(self, fps):
         self.clock.tick(fps)
