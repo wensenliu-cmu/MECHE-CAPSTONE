@@ -30,6 +30,3 @@ class Servo:
     def home_servo(self):
         self.curr_pos = self.home_pos
         self.homed = True
-
-class Motor:
-    ...

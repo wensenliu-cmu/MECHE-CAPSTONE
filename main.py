@@ -1,4 +1,4 @@
-from actuator_control import Servo, Motor
+from actuator_control import Servo
 from read_joystick import Joystick
 from display import DataWindow
 from comms import UART
@@ -38,6 +38,7 @@ while not PS5_Controller.done:
     
     ### Compiling and sending control inputs
     axes_values = PS5_Controller.labeled_axes
+    button_values = PS5_Controller.labeled_buttons
 
     # Base servo (controlled by lknob_x)
     if not base_servo.homed: base_servo.home_servo()
@@ -71,6 +72,23 @@ while not PS5_Controller.done:
 
     conn.write_serial(f"G{grip_servo.curr_pos}") # Encoding cannot encode periods, so must be integers
     conn.read_serial()
+
+    # Gripper Motor Control
+
+    # Left bumper drives forward, right bumper drives backward
+    lbump_val = button_values["l_bump"]
+    rbump_val = button_values["r_bump"]
+
+    if lbump_val == rbump_val:
+        conn.write_serial(f"F{0}")
+        conn.read_serial()
+        conn.write_serial(f"R{0}")
+        conn.read_serial()
+    else:
+        conn.write_serial(f"F{lbump_val}")
+        conn.read_serial()
+        conn.write_serial(f"R{rbump_val}")
+        conn.read_serial()
 
     #conn.write_serial(f"lknob_x is {2.5}") # Encoding cannot encode periods, so must be integers
     #conn.read_serial()
